@@ -113,6 +113,10 @@ jobs:
           #.ci/scripts/signing_metadata.sh
         shell: bash
 
+      # TODO: remove this step after debugging
+      - name: Setup tmate session
+        uses: mxschmitt/action-tmate@v3
+
       - name: Test
         run: sudo -E .ci/scripts/galaxy_ng-tests.sh -m
         shell: bash
