@@ -42,6 +42,10 @@ nav:
       - Getting Started:
         - Quickstart: quickstart.md
         - Build: build.md
+      - User Guide:
+        - Database Configuration: user-guide/database-configuration.md
+        - Signing Configuration: user-guide/signing-configuration.md
+        - Signing Quick Reference: user-guide/signing-quick-reference.md
   - Containers: container.md
   - Custom Resources:
       - Galaxy:
