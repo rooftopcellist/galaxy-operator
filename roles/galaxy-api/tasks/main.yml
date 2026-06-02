@@ -72,6 +72,26 @@
         status: "False"
         lastTransitionTime: "{{ lookup('pipe', 'date --iso-8601=seconds') }}"
 
+- name: Get existing API deployment to detect operator upgrade
+  k8s_info:
+    kind: Deployment
+    namespace: "{{ ansible_operator_meta.namespace }}"
+    name: "{{ ansible_operator_meta.name }}-api"
+  register: _existing_api_deployment
+
+- name: Set previous operator version
+  set_fact:
+    _previous_operator_version: >-
+      {{ _existing_api_deployment.resources[0].metadata.labels['app.kubernetes.io/operator-version'] | default('') }}
+  when:
+    - _existing_api_deployment.resources | length > 0
+
+- name: Determine if this is an operator upgrade
+  set_fact:
+    _is_operator_upgrade: >-
+      {{ _existing_api_deployment.resources | length > 0 and
+         (_previous_operator_version | default('')) != lookup('env', 'OPERATOR_VERSION') }}
+
 - name: galaxy-api deployment
   k8s:
     state: "{{ deployment_state }}"
