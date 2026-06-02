@@ -52,9 +52,6 @@
   when: users_result.return_code > 0
 
 - name: Run container-handle-image-data to cleanup recoverable artifacts
-  kubernetes.core.k8s_exec:
-    namespace: "{{ ansible_operator_meta.namespace }}"
-    pod: "{{ _api_pod_name }}"
-    container: "api"
-    command: bash -c "pulpcore-manager container-handle-image-data"
-  register: result
+  k8s:
+    state: present
+    definition: "{{ lookup('template', 'templates/handle-image-data-k8s-job.yaml.j2') }}"
