@@ -3,6 +3,12 @@
 - name: Configure Galaxy Server Secret
   include_tasks: combine_galaxy_settings.yml
 
+- name: Use DB fields encryption key as the Django SECRET_KEY
+  set_fact:
+    pulp_combined_settings: "{{ pulp_combined_settings | combine({'secret_key': db_fields_encryption_key}) }}"
+  no_log: "{{ no_log }}"
+  when: pulp_combined_settings.secret_key is not defined
+
 - name: Include redis role
   include_role:
     name: redis
