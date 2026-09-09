@@ -5,7 +5,7 @@
 
 - name: Use DB fields encryption key as the Django SECRET_KEY
   set_fact:
-    pulp_combined_settings: "{{ pulp_combined_settings | combine({'secret_key': db_fields_encryption_key}) }}"
+    pulp_combined_settings: "{{ pulp_combined_settings | combine({'secret_key': db_fields_encryption_secret_contents['resources'][0]['data']['database_fields.symmetric.key'] | b64decode}) }}"
   no_log: "{{ no_log }}"
   when: pulp_combined_settings.secret_key is not defined
 
